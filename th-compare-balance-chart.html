@@ -42,14 +42,16 @@
 		  init: function() {
 
 		    var self = this;
+				
+				self.getComputedDims(self);
 
 		    var margin = {
 		          top : 5,
-		          right : self.chartWidth*0.08,
-		          bottom : self.chartHeight* 0.05,
-		          left : self.chartWidth*0.08,
+		          right : self.computedWidth*0.08,
+		          bottom : self.computedHeight* 0.05,
+		          left : self.computedWidth*0.08,
 		          label: 3
-		      }, width = self.chartWidth*0.95 - margin.left - margin.right, height = self.chartHeight*1.0 - margin.top - margin.bottom
+		      }, width = self.computedWidth*0.95 - margin.left - margin.right, height = self.computedHeight*1.0 - margin.top - margin.bottom
 		         , barWidth = 5 , textLabelMargin = height*0.05;
 
 		      self.height = height;

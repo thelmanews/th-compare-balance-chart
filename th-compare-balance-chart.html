@@ -36,8 +36,8 @@
 
 		Polymer('th-compare-balance-chart', {
 		  chartData: [
-		    {label: 'Smoker', count: 3, image: 'images/kid.png', weight: 1},
-		    {label: 'Non-Smoker', count: 20, image: 'images/kid-smoker.png', weight: 1}
+		    {label: 'Smoker', count: 3, image: '../thelma-all/images/kid.png', weight: 1, size: 23},
+		    {label: 'Non-Smoker', count: 20, image: '../thelma-all/images/kid-smoker.png', weight: 1, size: 23}
 		  ],
 		  init: function() {
 
@@ -59,7 +59,6 @@
 
 		      self.extractElementDataPoints();
 
-
 		      var chartEl = self.$.chart;
 		      var container = d3.select(chartEl).attr('width', width + margin.left + margin.right)
 		          .attr('height', height + margin.top + margin.bottom)
@@ -68,7 +67,8 @@
 
 		      self.container = container;
 
-		      self.holderTranslate = 'translate(' + width / 2 + ',' + (height  - 31) + ')';
+		      self.holderTranslateLeft = 'translate(' + width / 2 + ',' + (height  - (self.chartData[0].size+11)) + ')';
+		      self.holderTranslateRight = 'translate(' + width / 2 + ',' + (height  - (self.chartData[1].size+11)) + ')';
 		      self.bargTranslate = 'translate(' + width / 2 + ',' + (height  - 20) + ')';
 
 
@@ -80,16 +80,16 @@
 		      self.chartData[0].weight = self.chartData[0].weight || 1;
 		      self.chartData[1].weight = self.chartData[1].weight || 1;
 
-		      self.chartData[0].width = self.chartData[0].width || 25;
-		      self.chartData[0].height = self.chartData[0].height || 20;
+		      self.chartData[0].size = self.chartData[0].size || 25;
+		      self.chartData[0].size = self.chartData[0].size || 20;
 
-		      self.chartData[1].width = self.chartData[1].width || 20;
-		      self.chartData[1].height = self.chartData[1].height || 20;
+		      self.chartData[1].size = self.chartData[1].size || 20;
+		      self.chartData[1].size = self.chartData[1].size || 20;
 
 
-		      self.chartData[0].elementsPerRow =  Math.floor((width/2 - 10)/ self.chartData[0].width);
+		      self.chartData[0].elementsPerRow =  Math.floor((width/2 - 10)/ self.chartData[0].size);
 
-		      self.chartData[1].elementsPerRow =  Math.floor((width/2 - 10)/ self.chartData[1].width);
+		      self.chartData[1].elementsPerRow =  Math.floor((width/2 - 10)/ self.chartData[1].size);
 		      
 
 	        container.append('path')
@@ -108,37 +108,37 @@
 
 	        self.left_holder = container.append('g')
 	            .attr('class', 'left_holder')
-	            .attr('transform', self.holderTranslate);
+	            .attr('transform', self.holderTranslateLeft);
 
 	        self.lefts = self.left_holder.selectAll('.lefts').data(d3.range(0,self.chartData[0].count)).enter().append('image')
 	            .attr('xlink:href', self.chartData[0].image)
 	            .attr('class', 'lefts')
 	            .attr('x', function(d, i) {
-	                 return -width / 2 + (i % self.chartData[0].elementsPerRow) * (self.chartData[0].width);
+	                 return -width / 2 + (i % self.chartData[0].elementsPerRow) * (self.chartData[0].size);
 	            })
 	            .attr('y', function(d, i) {
 	                 return -height* 1.2;
 	            })
-	            .attr('width', self.chartData[0].width)
-	            .attr('height', self.chartData[0].height);
+	            .attr('width', self.chartData[0].size)
+	            .attr('height', self.chartData[0].size);
 
 	        self.right_holder = container.append('g')
 	            .attr('class', 'right_holder')
-	            .attr('transform', self.holderTranslate);
+	            .attr('transform', self.holderTranslateRight);
 
 	        self.rights = self.right_holder.selectAll('.rights').data(d3.range(0,self.chartData[1].count)).enter().append('image')
 	            .attr('xlink:href', self.chartData[1].image)
 	            .attr('class', 'rights')
 	            .attr('x', function(d, i) {
-	                return width/2 - margin.right - ((i % self.chartData[1].elementsPerRow) * (self.chartData[1].width)) - 3;
+	                return width/2 - margin.right - ((i % self.chartData[1].elementsPerRow) * (self.chartData[1].size)) - 3;
 	            })
 	            .attr('y', function(d, i) {
 	                return -height* 1.2;
 	            })
 	            .attr('rx', 3)
 	            .attr('ry', 3)
-	            .attr('width', self.chartData[1].width)
-	            .attr('height', self.chartData[1].height);
+	            .attr('width', self.chartData[1].size)
+	            .attr('height', self.chartData[1].size);
 
 
 		  },
@@ -175,7 +175,7 @@
 	        self.lefts.transition().ease('linear').duration(dropSpeed).delay(function(d, i) {
 	            return i * delay.left;
 	        }).attr('y', function(d, i) {
-	            return -Math.floor(i / self.chartData[0].elementsPerRow) * (self.chartData[0].height) - 10;
+	            return -Math.floor(i / self.chartData[0].elementsPerRow) * (self.chartData[0].size) - 10;
 	        }).each('end', function(d, i) {
 
 	        	// after the drop of each object rotate elements
@@ -192,7 +192,7 @@
 			            self.rights.transition().ease('linear').duration(dropSpeed).delay(function(d, i) {
 			                return i * delay.right;
 			            }).attr('y', function(d, i) {
-			                return -Math.floor(i / self.chartData[1].elementsPerRow) * (self.chartData[1].height) - 10;
+			                return -Math.floor(i / self.chartData[1].elementsPerRow) * (self.chartData[1].size) - 10;
 			            }).each('end', function(d, i) {
 			            	
 
@@ -224,11 +224,11 @@
 	        }
 	        // for lefts
 	        function tween2(d, i, a) {
-	            return d3.interpolateString(self.holderTranslate + '  rotate(' + (fromAngle) + ')', self.holderTranslate + ' rotate(' + toAngle + ')');
+	            return d3.interpolateString(self.holderTranslateLeft + '  rotate(' + (fromAngle) + ')', self.holderTranslateLeft + ' rotate(' + toAngle + ')');
 	        }
 	        // for rights
 	        function tween3(d, i, a) {
-	            return d3.interpolateString(self.holderTranslate + ' rotate(' + fromAngle + ')', self.holderTranslate + '  rotate(' + toAngle + ')');
+	            return d3.interpolateString(self.holderTranslateRight + ' rotate(' + fromAngle + ')', self.holderTranslateRight + '  rotate(' + toAngle + ')');
 	        }
 
 	    },
